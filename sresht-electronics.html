@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sresht Electronics — Premium Electronics Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f7f5;--surface:#fff;--text:#1a1715;--muted:#6b6560;--accent:#2563eb;--accent-hover:#1d4ed8;--gold:#f59e0b;--border:#e5e3df;--shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);--radius:12px;--max:1280px;--green:#16a34a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+/* Nav */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:64px}
+.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:100%}
+.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:8px}
+.logo span{color:var(--accent);font-size:14px;font-weight:600;background:#eff6ff;padding:2px 10px;border-radius:999px}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{text-decoration:none;color:var(--text);font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+.cart-btn{position:relative;background:var(--accent);color:#fff;border:none;padding:8px 18px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.cart-count{background:#fff;color:var(--accent);width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.menu-toggle{display:none;background:none;border:none;font-size:24px;cursor:pointer}
+/* Hero */
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#0f172a 100%);color:#fff;padding:80px 24px;text-align:center}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,56px);margin-bottom:12px}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero p{font-size:17px;opacity:.85;max-width:500px;margin:0 auto 28px}
+.hero-badge{display:inline-block;background:rgba(245,158,11,.15);color:var(--gold);padding:6px 16px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:20px}
+.btn{display:inline-block;padding:14px 32px;border-radius:999px;font-weight:600;font-size:14px;text-decoration:none;cursor:pointer;transition:all .2s;border:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.3)}
+.btn-outline:hover{border-color:#fff}
+/* Sections */
+.section{padding:72px 24px;max-width:var(--max);margin:0 auto}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px);text-align:center;margin-bottom:8px}
+.section-sub{text-align:center;color:var(--muted);margin-bottom:40px}
+/* Categories */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:48px}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;transition:all .2s;font-size:14px;font-weight:500}
+.cat-card:hover{border-color:var(--accent);box-shadow:var(--shadow);transform:translateY(-2px)}
+.cat-card .icon{font-size:32px;margin-bottom:8px;display:block}
+.cat-card.active{border-color:var(--accent);background:#eff6ff}
+/* Products */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.product-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .2s}
+.product-card:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
+.product-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#f1f5f9,#e2e8f0);display:flex;align-items:center;justify-content:center;font-size:48px;position:relative}
+.product-badge{position:absolute;top:10px;left:10px;background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:4px 10px;border-radius:999px}
+.product-body{padding:16px}
+.product-body h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.product-body .brand{font-size:12px;color:var(--muted);margin-bottom:8px}
+.product-body .price{font-size:20px;font-weight:700;color:var(--accent)}
+.product-body .price .old{font-size:13px;color:var(--muted);text-decoration:line-through;margin-left:8px;font-weight:400}
+.product-body .rating{font-size:12px;color:var(--gold);margin:4px 0 8px}
+.add-cart{width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;transition:background .2s}
+.add-cart:hover{background:var(--accent-hover)}
+.add-cart.added{background:var(--green)}
+/* Cart Sidebar */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
+.cart-overlay.open{opacity:1;pointer-events:auto}
+.cart-sidebar{position:fixed;top:0;right:0;width:400px;max-width:90vw;height:100vh;background:var(--surface);z-index:201;transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.1)}
+.cart-sidebar.open{transform:translateX(0)}
+.cart-header{padding:20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.cart-header h3{font-size:18px}
+.cart-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)}
+.cart-items{flex:1;overflow-y:auto;padding:16px}
+.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.cart-item-img{width:60px;height:60px;background:#f1f5f9;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.cart-item-info{flex:1}
+.cart-item-info h4{font-size:14px;font-weight:600}
+.cart-item-info .qty{font-size:12px;color:var(--muted)}
+.cart-item-info .price{font-size:14px;font-weight:700;color:var(--accent)}
+.cart-item-remove{background:none;border:none;color:#ef4444;cursor:pointer;font-size:18px}
+.cart-footer{padding:20px;border-top:1px solid var(--border)}
+.cart-total{display:flex;justify-content:space-between;font-size:18px;font-weight:700;margin-bottom:12px}
+.cart-empty{text-align:center;padding:60px 20px;color:var(--muted)}
+/* Checkout */
+.checkout{display:none;max-width:600px;margin:40px auto;padding:32px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)}
+.checkout.active{display:block}
+.checkout h2{font-family:'Playfair Display',serif;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.form-group input,.form-group select{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:Inter,sans-serif;transition:border-color .2s}
+.form-group input:focus{border-color:var(--accent);outline:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.order-summary{background:#f8fafc;border-radius:8px;padding:16px;margin:20px 0}
+.order-summary .row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}
+.order-summary .total{font-weight:700;font-size:16px;border-top:1px solid var(--border);padding-top:10px;margin-top:6px}
+/* Footer */
+footer{background:#0f172a;color:#94a3b8;padding:40px 24px;text-align:center;font-size:13px}
+footer p{margin:4px 0}
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1715;color:#fff;padding:12px 24px;border-radius:999px;font-size:14px;font-weight:500;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+@media(max-width:768px){
+.nav-links{display:none}.menu-toggle{display:block}
+.hero{padding:60px 16px}.section{padding:48px 16px}
+.product-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+.cat-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+.form-row{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+.product-grid{grid-template-columns:1fr 1fr}
+.logo{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-inner">
+<a href="#" class="logo">Sresht<span>Electronics</span></a>
+<ul class="nav-links">
+<li><a href="#home">Home</a></li>
+<li><a href="#products">Products</a></li>
+<li><a href="#categories">Categories</a></li>
+<li><a href="#deals">Deals</a></li>
+</ul>
+<button class="cart-btn" onclick="toggleCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+<button class="menu-toggle" onclick="alert('Menu')">☰</button>
+</div>
+</nav>
+
+<section class="hero" id="home">
+<div class="hero-badge">⚡ Free Shipping on Orders Above ₹999</div>
+<h1>Premium <em>Electronics</em><br>for Your Smart Life</h1>
+<p>From smartphones to home theaters — discover the latest tech at the best prices.</p>
+<a href="#products" class="btn btn-primary">Shop Now</a>
+<a href="#categories" class="btn btn-outline" style="margin-left:12px">Browse Categories</a>
+</section>
+
+<div class="section" id="categories">
+<h2 class="section-title">Shop by Category</h2>
+<p class="section-sub">Find exactly what you need</p>
+<div class="cat-grid" id="catGrid">
+<div class="cat-card active" onclick="filterCategory('all',this)"><span class="icon">📱</span>All Products</div>
+<div class="cat-card" onclick="filterCategory('mobile',this)"><span class="icon">📱</span>Mobile Phones</div>
+<div class="cat-card" onclick="filterCategory('accessories',this)"><span class="icon">🎧</span>Accessories</div>
+<div class="cat-card" onclick="filterCategory('laptop',this)"><span class="icon">💻</span>Laptops & Accessories</div>
+<div class="cat-card" onclick="filterCategory('tv',this)"><span class="icon">📺</span>TV & Home Theater</div>
+<div class="cat-card" onclick="filterCategory('audio',this)"><span class="icon">🔊</span>Audio Systems</div>
+<div class="cat-card" onclick="filterCategory('appliances',this)"><span class="icon">❄️</span>Home Appliances</div>
+<div class="cat-card" onclick="filterCategory('gaming',this)"><span class="icon">🎮</span>Gaming</div>
+</div>
+</div>
+
+<div class="section" id="products">
+<h2 class="section-title">Featured Products</h2>
+<p class="section-sub" id="productCount">Showing all products</p>
+<div class="product-grid" id="productGrid"></div>
+</div>
+
+<div id="checkoutSection"></div>
+
+<footer>
+<p><strong>Sresht Electronics</strong> — Your Trusted Electronics Store</p>
+<p>© 2026 All rights reserved. Made with ❤️ in India.</p>
+<p style="color:var(--gold);margin-top:8px">📞 +91 98765 43210 | ✉️ support@sreshtelectronics.com</p>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+<div class="cart-header"><h3>🛒 Your Cart</h3><button class="cart-close" onclick="toggleCart()">✕</button></div>
+<div class="cart-items" id="cartItems"><div class="cart-empty">Your cart is empty</div></div>
+<div class="cart-footer" id="cartFooter" style="display:none">
+<div class="cart-total"><span>Total:</span><span id="cartTotal">₹0</span></div>
+<button class="btn btn-primary" style="width:100%" onclick="showCheckout()">Proceed to Checkout</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const products = [
+{id:1,name:"iPhone 15 Pro Max",brand:"Apple",price:149900,oldPrice:159900,rating:4.8,reviews:2345,cat:"mobile",icon:"📱",badge:"Hot"},
+{id:2,name:"Samsung Galaxy S24 Ultra",brand:"Samsung",price:129999,oldPrice:139999,rating:4.7,reviews:1890,cat:"mobile",icon:"📱"},
+{id:3,name:"OnePlus 12",brand:"OnePlus",price:64999,oldPrice:69999,rating:4.6,reviews:1567,cat:"mobile",icon:"📱",badge:"New"},
+{id:4,name:"AirPods Pro 2nd Gen",brand:"Apple",price:24900,rating:4.8,reviews:4521,cat:"accessories",icon:"🎧",badge:"Best"},
+{id:5,name:"Samsung 65\" 4K QLED TV",brand:"Samsung",price:89990,oldPrice:109990,rating:4.7,reviews:892,cat:"tv",icon:"📺"},
+{id:6,name:"Sony 55\" Bravia OLED",brand:"Sony",price:149990,rating:4.9,reviews:445,cat:"tv",icon:"📺",badge:"Premium"},
+{id:7,name:"JBL PartyBox 310",brand:"JBL",price:29999,oldPrice:34999,rating:4.6,reviews:1234,cat:"audio",icon:"🔊"},
+{id:8,name:"Sony HT-S40R Home Theater",brand:"Sony",price:24990,rating:4.5,reviews:678,cat:"audio",icon:"🔊",badge:"Deal"},
+{id:9,name:"LG 260L Frost Free Refrigerator",brand:"LG",price:28990,oldPrice:32990,rating:4.4,reviews:2100,cat:"appliances",icon:"❄️"},
+{id:10,name:"Samsung 28L Microwave",brand:"Samsung",price:12990,oldPrice:14990,rating:4.5,reviews:890,cat:"appliances",icon:"🍲"},
+{id:11,name:"MacBook Air M3",brand:"Apple",price:114900,rating:4.9,reviews:3200,cat:"laptop",icon:"💻",badge:"New"},
+{id:12,name:"Dell Inspiron 15",brand:"Dell",price:62990,oldPrice:69990,rating:4.4,reviews:1567,cat:"laptop",icon:"💻"},
+{id:13,name:"Logitech MX Master 3S",brand:"Logitech",price:8995,rating:4.7,reviews:3400,cat:"accessories",icon:"🖱️"},
+{id:14,name:"Samsung 25W Fast Charger",brand:"Samsung",price:1299,oldPrice:1999,rating:4.3,reviews:8900,cat:"accessories",icon:"🔌"},
+{id:15,name:"PS5 Digital Edition",brand:"Sony",price:44990,rating:4.8,reviews:5600,cat:"gaming",icon:"🎮",badge:"Hot"},
+{id:16,name:"Xbox Series X",brand:"Microsoft",price:49990,rating:4.7,reviews:2300,cat:"gaming",icon:"🎮"},
+{id:17,name:"Bose SoundLink Revolve+",brand:"Bose",price:29900,rating:4.6,reviews:1234,cat:"audio",icon:"🔊"},
+{id:18,name:"LG 8kg Front Load Washer",brand:"LG",price:34990,oldPrice:39990,rating:4.5,reviews:780,cat:"appliances",icon:"🧺"},
+{id:19,name:"Samsung Galaxy Buds2 Pro",brand:"Samsung",price:17999,rating:4.5,reviews:2100,cat:"accessories",icon:"🎧"},
+{id:20,name:"Apple Watch Series 9",brand:"Apple",price:41900,rating:4.8,reviews:4500,cat:"accessories",icon:"⌚",badge:"New"},
+{id:21,name:"Mi 43\" 4K Android TV",brand:"Xiaomi",price:24999,oldPrice:29999,rating:4.4,reviews:3400,cat:"tv",icon:"📺"},
+{id:22,name:"HP 15s Ryzen 5 Laptop",brand:"HP",price:52990,rating:4.3,reviews:1234,cat:"laptop",icon:"💻"},
+{id:23,name:"Sennheiser HD 450BT",brand:"Sennheiser",price:9990,oldPrice:12990,rating:4.5,reviews:890,cat:"audio",icon:"🎧"},
+{id:24,name:"Nintendo Switch OLED",brand:"Nintendo",price:28990,rating:4.8,reviews:1800,cat:"gaming",icon:"🎮",badge:"Deal"},
+];
+
+let cart = JSON.parse(localStorage.getItem('sresht_cart')||'[]');
+let filtered = 'all';
+
+function renderProducts(){
+const grid = document.getElementById('productGrid');
+const items = filtered==='all' ? products : products.filter(p=>p.cat===filtered);
+document.getElementById('productCount').textContent = `Showing ${items.length} products`;
+grid.innerHTML = items.map(p=>`
+<div class="product-card">
+<div class="product-img">${p.icon}${p.badge?`<span class="product-badge">${p.badge}</span>`:''}</div>
+<div class="product-body">
+<h3>${p.name}</h3>
+<div class="brand">${p.brand}</div>
+<div class="price">₹${p.price.toLocaleString('en-IN')}${p.oldPrice?`<span class="old">₹${p.oldPrice.toLocaleString('en-IN')}</span>`:''}</div>
+<div class="rating">${'★'.repeat(Math.floor(p.rating))}${p.rating%1>=0.5?'½':''} ${p.rating} (${p.reviews})</div>
+<button class="add-cart" onclick="addToCart(${p.id},this)">Add to Cart</button>
+</div></div>`).join('');
+}
+
+function addToCart(id,btn){
+const p = products.find(x=>x.id===id);
+const item = cart.find(x=>x.id===id);
+if(item) item.qty++; else cart.push({...p,qty:1});
+saveCart();
+btn.textContent='✓ Added';btn.classList.add('added');
+setTimeout(()=>{btn.textContent='Add to Cart';btn.classList.remove('added')},1200);
+showToast(`${p.name} added to cart`);
+}
+
+function removeFromCart(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart();renderProducts();}
+function saveCart(){localStorage.setItem('sresht_cart',JSON.stringify(cart));renderCart();renderProducts();}
+
+function renderCart(){
+const el=document.getElementById('cartItems');
+const footer=document.getElementById('cartFooter');
+document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+if(!cart.length){el.innerHTML='<div class="cart-empty">Your cart is empty</div>';footer.style.display='none';return;}
+footer.style.display='block';
+el.innerHTML=cart.map(i=>`
+<div class="cart-item">
+<div class="cart-item-img">${i.icon}</div>
+<div class="cart-item-info">
+<h4>${i.name}</h4>
+<div class="qty">Qty: ${i.qty} × ₹${i.price.toLocaleString('en-IN')}</div>
+<div class="price">₹${(i.price*i.qty).toLocaleString('en-IN')}</div>
+</div>
+<button class="cart-item-remove" onclick="removeFromCart(${i.id})">🗑️</button>
+</div>`).join('');
+document.getElementById('cartTotal').textContent='₹'+cart.reduce((s,i)=>s+i.price*i.qty,0).toLocaleString('en-IN');
+}
+
+function toggleCart(){document.getElementById('cartOverlay').classList.toggle('open');document.getElementById('cartSidebar').classList.toggle('open');}
+
+function showCheckout(){
+toggleCart();
+const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+document.getElementById('checkoutSection').innerHTML=`
+<div class="checkout active" id="checkoutForm">
+<h2>🛍️ Checkout</h2>
+<div class="order-summary">
+${cart.map(i=>`<div class="row"><span>${i.name} ×${i.qty}</span><span>₹${(i.price*i.qty).toLocaleString('en-IN')}</span></div>`).join('')}
+<div class="row total"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>First Name</label><input placeholder="Krishna"></div>
+<div class="form-group"><label>Last Name</label><input placeholder="Sharma"></div>
+</div>
+<div class="form-group"><label>Email</label><input type="email" placeholder="you@email.com"></div>
+<div class="form-group"><label>Phone</label><input type="tel" placeholder="+91 98765 43210"></div>
+<div class="form-group"><label>Address</label><input placeholder="Street, Area"></div>
+<div class="form-row">
+<div class="form-group"><label>City</label><input placeholder="Mumbai"></div>
+<div class="form-group"><label>Pincode</label><input placeholder="400001"></div>
+</div>
+<div class="form-group"><label>Payment Method</label><select><option>Cash on Delivery</option><option>UPI</option><option>Credit/Debit Card</option><option>Net Banking</option></select></div>
+<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="placeOrder()">Place Order — ₹${total.toLocaleString('en-IN')}</button>
+</div>`;
+document.getElementById('checkoutForm').scrollIntoView({behavior:'smooth'});
+}
+
+function placeOrder(){
+showToast('✅ Order placed successfully! Demo mode — no real order.');
+cart=[];saveCart();
+document.getElementById('checkoutSection').innerHTML='';
+}
+
+function filterCategory(cat,el){
+filtered=cat;
+document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('active'));
+el.classList.add('active');
+renderProducts();
+}
+
+function showToast(msg){
+const t=document.getElementById('toast');
+t.textContent=msg;t.classList.add('show');
+setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+renderProducts();renderCart();
+</script>
+</body>
+</html>
